@@ -142,7 +142,7 @@ const getBodyMatcher = (route, fetchMock) => {
 			return true;
 		}
 
-		let sentBody;
+		let sentBody = body;
 
 		try {
 			debug('  Parsing request body as JSON');

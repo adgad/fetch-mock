@@ -1,3 +1,4 @@
+const FormData = require('form-data');
 const chai = require('chai');
 const expect = chai.expect;
 
@@ -64,7 +65,7 @@ describe('body matching', () => {
 		expect(fm.calls(true).length).to.equal(0);
 	});
 
-	it('should not match if body sent isn’t JSON', async () => {
+	it('should not match if the bodies are of different types', async () => {
 		fm.mock({ body: { foo: 'bar' } }, 200).catch();
 
 		await fm.fetchHandler('http://a.com/', {
@@ -110,6 +111,54 @@ describe('body matching', () => {
 
 		await fm.fetchHandler('http://a.com/');
 		expect(fm.calls(true).length).to.equal(1);
+	});
+
+	it('should match exact FormData bodies', async () => {
+		const formData = new FormData();
+		formData.append('foo', 'bar');
+
+		fm.mock({ body: formData }, 200).catch();
+
+		await fm.fetchHandler('http://a.com/', {
+			method: 'POST',
+			body: formData,
+			headers: {},
+		});
+		expect(fm.calls(true).length).to.equal(1);
+	});
+
+	it('should not match FormData bodies that are not the same', async () => {
+		const expectedFormData = new FormData();
+		expectedFormData.append('foo', 'bar');
+
+		fm.mock({ body: expectedFormData }, 200).catch();
+
+		const actualFormData = new FormData();
+		actualFormData.append('fizz', 'buzz');
+		await fm.fetchHandler('http://a.com/', {
+			method: 'POST',
+			body: actualFormData,
+			headers: {},
+		});
+		expect(fm.calls(true).length).to.equal(0);
+	});
+
+	it('should not ignore the order of the form fields', async () => {
+		const expectedFormData = new FormData();
+		expectedFormData.append('foo', 'bar');
+		expectedFormData.append('fizz', 'buzz');
+
+		fm.mock({ body: expectedFormData }, 200).catch();
+
+		const actualFormData = new FormData();
+		actualFormData.append('fizz', 'buzz');
+		actualFormData.append('foo', 'bar');
+		await fm.fetchHandler('http://a.com/', {
+			method: 'POST',
+			body: actualFormData,
+			headers: {},
+		});
+		expect(fm.calls(true).length).to.equal(0);
 	});
 
 	describe('partial body matching', () => {
@@ -169,6 +218,23 @@ describe('body matching', () => {
 				body: JSON.stringify({ ham: [1, 2, 3] }),
 			});
 			expect(res.status).to.equal(404);
+		});
+
+		it('should not support partial matches of FormData bodies', async () => {
+			const expectedFormData = new FormData();
+			expectedFormData.append('foo', 'bar');
+
+			fm.mock({ body: expectedFormData, matchPartialBody: true }, 200).catch();
+
+			const actualFormData = new FormData();
+			actualFormData.append('fizz', 'buzz');
+			actualFormData.append('foo', 'bar');
+			await fm.fetchHandler('http://a.com/', {
+				method: 'POST',
+				body: actualFormData,
+				headers: {},
+			});
+			expect(fm.calls(true).length).to.equal(0);
 		});
 	});
 });
