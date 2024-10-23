@@ -32,7 +32,6 @@ export function manageFetchMockGlobally(jest: Jest) {
 	const { clearAllMocks, resetAllMocks, restoreAllMocks } = jest;
 
 	jest.clearAllMocks = () => {
-		console.log('yeah');
 		clearAllMocks.apply(jest);
 		fetchMockJest.mockClear();
 		return jest;

@@ -75,7 +75,7 @@
 		"webdriverio": "^8.27.0"
 	},
 	"volta": {
-		"node": "20.0.0"
+		"node": "18.20.4"
 	},
 	"lint-staged": {
 		"**/*.js": [

@@ -166,11 +166,19 @@ export default class Router {
 
 					const requestBody = request?.body || options?.body;
 					if (requestBody instanceof ReadableStream) {
-						requestBody.cancel(error);
+						if (requestBody.locked) {
+							requestBody.getReader().cancel(error);
+						} else {
+							requestBody.cancel(error);
+						}
 					}
 
 					if (callLog?.response?.body) {
-						callLog.response.body.cancel(error);
+						if (callLog.response.body.locked) {
+							callLog.response.body.getReader().cancel(error);
+						} else {
+							callLog.response.body.cancel(error);
+						}
 					}
 					reject(error);
 				};
