@@ -25,7 +25,7 @@ Sets a `Content-Length` header on each response, with the exception of responses
 
 `{Boolean}` default: `false`
 
-Match calls that only partially match a specified body json. Uses the [is-subset](https://www.npmjs.com/package/is-subset) library under the hood, which implements behaviour the same as jest's [.objectContaining()](https://jestjs.io/docs/en/expect#expectobjectcontainingobject) method.
+Match calls that only partially match a specified body json. 
 
 ### allowRelativeUrls<sup>†</sup>
 

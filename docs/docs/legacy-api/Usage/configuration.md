@@ -49,7 +49,7 @@ Configures behaviour when attempting to add a new route with the same name (or i
 
 `{Boolean}` default: `false`
 
-Match calls that only partially match a specified body json. Uses the [is-subset](https://www.npmjs.com/package/is-subset) library under the hood, which implements behaviour the same as jest's [.objectContaining()](https://jestjs.io/docs/en/expect#expectobjectcontainingobject) method.
+Match calls that only partially match a specified body json.
 
 ### warnOnFallback
 

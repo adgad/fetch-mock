@@ -24,7 +24,6 @@
 		"@types/glob-to-regexp": "^0.4.4",
 		"dequal": "^2.0.3",
 		"glob-to-regexp": "^0.4.1",
-		"is-subset-of": "^3.1.10",
 		"regexparam": "^3.0.0"
 	},
 	"repository": {
