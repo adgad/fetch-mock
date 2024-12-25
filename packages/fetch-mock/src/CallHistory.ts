@@ -84,11 +84,11 @@ class CallHistory {
 
 		if (isMatchedOrUnmatched(filter)) {
 			if (([true, 'matched'] as CallHistoryFilter[]).includes(filter)) {
-				calls = calls.filter(({ route }) => !route.config.isFallback);
+				calls = calls.filter((call) => !call.route?.config.isFallback);
 			} else if (
 				([false, 'unmatched'] as CallHistoryFilter[]).includes(filter)
 			) {
-				calls = calls.filter(({ route }) => Boolean(route.config.isFallback));
+				calls = calls.filter((call) => Boolean(call.route?.config.isFallback));
 			}
 
 			if (!options) {
@@ -96,11 +96,7 @@ class CallHistory {
 			}
 		} else if (isName(filter)) {
 			calls = calls.filter(
-				({
-					route: {
-						config: { name },
-					},
-				}) => name === filter,
+				(call) => call.route?.config.name === filter,
 			);
 			if (!options) {
 				return calls;
